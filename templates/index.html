@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RaysKAI SMS Campaign</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #f0f0f0;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    h1 { text-align: center; font-size: 2rem; margin-bottom: 6px; color: #a855f7; }
+    p.subtitle { text-align: center; color: #888; margin-bottom: 40px; }
+    .container { max-width: 860px; margin: 0 auto; }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+    .step-label {
+      font-size: 0.75rem;
+      color: #a855f7;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+      color: #f0f0f0;
+      border-bottom: 1px solid #2a2a2a;
+      padding-bottom: 10px;
+    }
+    label { display: block; font-size: 0.82rem; color: #aaa; margin-bottom: 5px; margin-top: 14px; }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 14px;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #f0f0f0;
+      font-size: 0.92rem;
+      outline: none;
+    }
+    input:focus, textarea:focus { border-color: #a855f7; }
+    textarea { resize: vertical; min-height: 80px; }
+    .hint { font-size: 0.73rem; color: #555; margin-top: 5px; }
+    .stat-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 14px 20px;
+      flex: 1;
+      min-width: 120px;
+    }
+    .stat .num { font-size: 1.6rem; font-weight: 700; color: #a855f7; }
+    .stat .lbl { font-size: 0.72rem; color: #666; margin-top: 2px; }
+    .stat.green .num { color: #a3e635; }
+    .stat.red .num { color: #f87171; }
+    .token-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .token-btn {
+      padding: 4px 12px;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 20px;
+      color: #a855f7;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .token-btn:hover { background: #333; }
+    .char-count { font-size: 0.75rem; color: #666; margin-top: 6px; text-align: right; }
+    .preview-box {
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: #ccc;
+      line-height: 1.5;
+    }
+    .preview-label { font-size: 0.72rem; color: #555; margin-bottom: 6px; }
+    .consent-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 16px;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .consent-row input[type=checkbox] { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; }
+    .consent-row span { font-size: 0.82rem; color: #aaa; line-height: 1.5; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .meta-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .meta {
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      flex: 1;
+      font-size: 0.8rem;
+      color: #888;
+    }
+    .meta span { color: #f0f0f0; font-weight: 600; }
+    button.primary {
+      margin-top: 20px;
+      width: 100%;
+      padding: 13px;
+      background: #a855f7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    button.primary:hover { background: #9333ea; }
+    button.primary:disabled { background: #444; cursor: not-allowed; }
+    .output {
+      margin-top: 16px;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: #a3e635;
+      white-space: pre-wrap;
+      max-height: 260px;
+      overflow-y: auto;
+      display: none;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th { text-align: left; padding: 8px; color: #a855f7; border-bottom: 1px solid #333; }
+    td { padding: 8px; border-bottom: 1px solid #1e1e1e; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .badge.sent { background: #1a3a1a; color: #a3e635; }
+    .badge.failed { background: #3a1a1a; color: #f87171; }
+    .badge.dry-run { background: #2a2a1a; color: #facc15; }
+    .flagged-list {
+      margin-top: 12px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 0.75rem;
+      color: #888;
+      display: none;
+    }
+    .flagged-list table td { color: #888; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>RaysKAI SMS Campaign</h1>
+  <p class="subtitle">Bulk SMS tool for Canadian clinic patients</p>
+
+  <!-- Step 1 -->
+  <div class="card">
+    <div class="step-label">Step 1</div>
+    <h2>Patient List</h2>
+    <label>Upload CSV File</label>
+    <input type="file" id="bulk-file" accept=".csv" onchange="parseCSV()" />
+    <p class="hint">CSV must include columns: phone, first_name, last_name</p>
+
+    <div class="stat-row" id="csv-stats" style="display:none">
+      <div class="stat green">
+        <div class="num" id="stat-valid">0</div>
+        <div class="lbl">Valid recipients</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-total">0</div>
+        <div class="lbl">Total rows</div>
+      </div>
+      <div class="stat red">
+        <div class="num" id="stat-flagged">0</div>
+        <div class="lbl">Rows flagged</div>
+      </div>
+    </div>
+
+    <div id="cols-detected" class="hint" style="margin-top:10px;"></div>
+
+    <div class="flagged-list" id="flagged-list">
+      <table>
+        <tr><th>Row</th><th>Reason</th><th>Value</th></tr>
+        <tbody id="flagged-body"></tbody>
+      </table>
+    </div>
+    <div id="view-flagged-link" style="display:none; margin-top:8px;">
+      <a href="#" onclick="toggleFlagged(); return false;" style="color:#a855f7; font-size:0.78rem;">View flagged rows</a>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="card">
+    <div class="step-label">Step 2</div>
+    <h2>Compose Message</h2>
+
+    <div class="token-row">
+      <button class="token-btn" onclick="insertToken('{first_name}')">[first_name]</button>
+      <button class="token-btn" onclick="insertToken('{last_name}')">[last_name]</button>
+      <button class="token-btn" onclick="insertToken('{phone}')">[phone]</button>
+    </div>
+
+    <label>Message Template</label>
+    <textarea id="bulk-template" oninput="updatePreview(); updateCharCount()">Hi {first_name}, it's been a while since your last visit — we'd love to see you again. Reply BOOK to schedule, or STOP to opt out. – Brightleaf Family Dental</textarea>
+    <div class="char-count" id="char-count">0 characters · 1 SMS segment</div>
+
+    <div class="preview-box">
+      <div class="preview-label">Preview · sample recipient</div>
+      <div id="preview-text">—</div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="card">
+    <div class="step-label">Step 3</div>
+    <h2>Compliance & Sending Window</h2>
+
+    <div class="consent-row">
+      <input type="checkbox" id="consent-check" />
+      <span>I confirm all recipients have given consent to receive SMS from this clinic, and this list has been checked against opt-outs on file. Every message ends with "Reply STOP to opt out."</span>
+    </div>
+
+    <p class="hint" style="margin-top:12px;">Sends are restricted to <strong>09:00–20:00 America/Toronto</strong>. Campaigns outside this window will be blocked.</p>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="card">
+    <div class="step-label">Step 4</div>
+    <h2>Batch & Rate Limits</h2>
+
+    <div class="grid-2">
+      <div>
+        <label>Batch Size</label>
+        <input type="number" id="batch-size" value="300" oninput="updateEstimate()" />
+        <p class="hint">Messages per batch</p>
+      </div>
+      <div>
+        <label>Delay Between Batches (seconds)</label>
+        <input type="number" id="batch-pause" value="45" oninput="updateEstimate()" />
+      </div>
+      <div>
+        <label>Rate Cap (messages/second)</label>
+        <input type="number" id="rate-cap" value="10" oninput="updateEstimate()" />
+      </div>
+    </div>
+
+    <div class="meta-row" id="estimate-row">
+      <div class="meta">Batches: <span id="est-batches">—</span></div>
+      <div class="meta">Est. time: <span id="est-time">—</span></div>
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="card">
+    <div class="step-label">Step 5</div>
+    <h2>Review & Send</h2>
+
+    <div class="meta-row">
+      <div class="meta">Recipients: <span id="review-recipients">—</span></div>
+      <div class="meta">Batching: <span id="review-batching">—</span></div>
+      <div class="meta">Sending window: <span>09:00–20:00 America/Toronto</span></div>
+    </div>
+
+    <button class="primary" onclick="sendBulk()" id="bulk-btn">Send Campaign</button>
+    <div class="output" id="bulk-output"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="card">
+    <div class="step-label">Results</div>
+    <h2>📋 Sent Messages Log</h2>
+    <button class="primary" onclick="loadResults()" style="margin-top:0;">Refresh Results</button>
+    <div id="results-table" style="margin-top:16px;"></div>
+  </div>
+
+</div>
+
+<script>
+  let csvFile = null;
+  let validCount = 0;
+  let sampleRecipient = { first_name: 'Marianne', last_name: 'Doe', phone: '+14165550101' };
+
+  function insertToken(token) {
+    const ta = document.getElementById('bulk-template');
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const val = ta.value;
+    ta.value = val.substring(0, start) + token + val.substring(end);
+    ta.selectionStart = ta.selectionEnd = start + token.length;
+    ta.focus();
+    updatePreview();
+    updateCharCount();
+  }
+
+  function updateCharCount() {
+    const text = document.getElementById('bulk-template').value;
+    const chars = text.length;
+    const segments = Math.ceil(chars / 160) || 1;
+    document.getElementById('char-count').textContent = `${chars} characters · ${segments} SMS segment${segments > 1 ? 's' : ''}`;
+  }
+
+  function updatePreview() {
+    const template = document.getElementById('bulk-template').value;
+    const preview = template
+      .replace(/\{first_name\}/g, sampleRecipient.first_name || 'Patient')
+      .replace(/\{last_name\}/g, sampleRecipient.last_name || '')
+      .replace(/\{phone\}/g, sampleRecipient.phone || '');
+    document.getElementById('preview-text').textContent = preview;
+  }
+
+  function updateEstimate() {
+    const valid = validCount || 0;
+    const batchSize = parseInt(document.getElementById('batch-size').value) || 300;
+    const pause = parseInt(document.getElementById('batch-pause').value) || 45;
+    const rate = parseInt(document.getElementById('rate-cap').value) || 10;
+
+    if (valid === 0) return;
+
+    const batches = Math.ceil(valid / batchSize);
+    const totalSecs = (valid / rate) + ((batches - 1) * pause);
+    const mins = Math.round(totalSecs / 60);
+
+    document.getElementById('est-batches').textContent = batches;
+    document.getElementById('est-time').textContent = `~${mins} min`;
+    document.getElementById('review-recipients').textContent = `${valid} patients`;
+    document.getElementById('review-batching').textContent = `${batchSize} per batch · ${pause}s delay · ${batches} batches`;
+  }
+
+  function toggleFlagged() {
+    const el = document.getElementById('flagged-list');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+
+  async function parseCSV() {
+    const fileInput = document.getElementById('bulk-file');
+    if (!fileInput.files[0]) return;
+    csvFile = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append('csv_file', csvFile);
+
+    const res = await fetch('/parse-csv', { method: 'POST', body: formData });
+    const data = await res.json();
+
+    if (data.error) { alert(data.error); return; }
+
+    validCount = data.valid;
+    document.getElementById('stat-valid').textContent = data.valid.toLocaleString();
+    document.getElementById('stat-total').textContent = data.total.toLocaleString();
+    document.getElementById('stat-flagged').textContent = data.flagged.toLocaleString();
+    document.getElementById('csv-stats').style.display = 'flex';
+    document.getElementById('cols-detected').textContent = `Columns detected: ${data.columns_detected}`;
+
+    if (data.sample_recipient) {
+      sampleRecipient = data.sample_recipient;
+      updatePreview();
+    }
+
+    if (data.flagged > 0) {
+      document.getElementById('view-flagged-link').style.display = 'block';
+      const tbody = document.getElementById('flagged-body');
+      tbody.innerHTML = '';
+      data.flagged_rows.forEach(r => {
+        tbody.innerHTML += `<tr><td>${r.row}</td><td>${r.reason}</td><td>${r.data}</td></tr>`;
+      });
+    }
+
+    updateEstimate();
+  }
+
+  async function sendBulk() {
+    if (!csvFile) { alert('Please upload a CSV file first.'); return; }
+
+    const consent = document.getElementById('consent-check').checked;
+    const template = document.getElementById('bulk-template').value.trim();
+    const batchSize = document.getElementById('batch-size').value;
+    const batchPause = document.getElementById('batch-pause').value;
+    const rate = document.getElementById('rate-cap').value;
+    const btn = document.getElementById('bulk-btn');
+    const output = document.getElementById('bulk-output');
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    output.style.display = 'block';
+    output.textContent = 'Running campaign...';
+
+    const formData = new FormData();
+    formData.append('csv_file', csvFile);
+    formData.append('template', template);
+    formData.append('batch_size', batchSize);
+    formData.append('batch_pause', batchPause);
+    formData.append('rate', rate);
+    formData.append('consent', consent ? 'true' : 'false');
+
+    const res = await fetch('/send-bulk', { method: 'POST', body: formData });
+    const data = await res.json();
+
+    output.textContent = data.output || data.error;
+    btn.disabled = false;
+    btn.textContent = 'Send Campaign';
+    loadResults();
+  }
+
+  async function loadResults() {
+    const res = await fetch('/results');
+    const data = await res.json();
+    const container = document.getElementById('results-table');
+
+    if (!data.rows || data.rows.length === 0) {
+      container.innerHTML = '<p style="color:#888; font-size:0.85rem;">No messages sent yet.</p>';
+      return;
+    }
+
+    let html = '<table><tr><th>Phone</th><th>First Name</th><th>Last Name</th><th>Status</th><th>Time</th></tr>';
+    data.rows.forEach(row => {
+      const badge = `<span class="badge ${row.status}">${row.status}</span>`;
+      html += `<tr>
+        <td>${row.phone}</td>
+        <td>${row.first_name || '-'}</td>
+        <td>${row.last_name || '-'}</td>
+        <td>${badge}</td>
+        <td style="color:#888;">${row.timestamp || '-'}</td>
+      </tr>`;
+    });
+    html += '</table>';
+    container.innerHTML = html;
+  }
+
+  updatePreview();
+  updateCharCount();
+  loadResults();
+</script>
+</body>
+</html>

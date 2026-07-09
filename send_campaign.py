@@ -1,20 +1,6 @@
 #!/usr/bin/env python3
 """
 Bulk SMS campaign sender for a one-time clinic campaign (Canadian patients).
-
-Reads recipients from a CSV, personalizes a message template, sends via
-Twilio with rate limiting and batching, retries transient errors, and writes
-a per-recipient results log that doubles as a resume checkpoint.
-
-Usage:
-    python send_campaign.py --csv patients.csv --dry-run          # rehearse
-    python send_campaign.py --csv patients.csv                    # send
-    python send_campaign.py --csv patients.csv --resume           # continue
-    python send_campaign.py --check-status                        # delivery report
-
-Credentials are read from environment variables (or a .env file):
-    TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and one of
-    TWILIO_MESSAGING_SERVICE_SID (recommended) or TWILIO_FROM_NUMBER.
 """
 
 import argparse
@@ -36,7 +22,7 @@ DEFAULT_TEMPLATE = (
 )
 
 RESULTS_FIELDS = [
-    "phone", "first_name", "status", "message_sid",
+    "phone", "first_name", "last_name", "status", "message_sid",
     "error_code", "error_message", "timestamp",
 ]
 
@@ -127,12 +113,14 @@ def build_config(args: argparse.Namespace) -> Config:
 
 PHONE_COLUMNS = ("phone", "phone_number", "mobile", "cell", "number")
 NAME_COLUMNS = ("first_name", "firstname", "given_name", "name")
+LAST_NAME_COLUMNS = ("last_name", "lastname", "surname", "family_name")
 
 
 @dataclass
 class Recipient:
     phone: str
     first_name: str
+    last_name: str
     row: int
 
 
@@ -165,6 +153,7 @@ def load_recipients(cfg: Config) -> list[Recipient]:
             sys.exit("error: CSV file is empty")
         phone_col = pick_column(reader.fieldnames, PHONE_COLUMNS)
         name_col = pick_column(reader.fieldnames, NAME_COLUMNS)
+        last_name_col = pick_column(reader.fieldnames, LAST_NAME_COLUMNS)
         if not phone_col:
             sys.exit(f"error: no phone column found. Expected one of {PHONE_COLUMNS}")
         if not name_col:
@@ -186,7 +175,8 @@ def load_recipients(cfg: Config) -> list[Recipient]:
                 continue
             seen.add(phone)
             first_name = (row.get(name_col, "") or "").strip() if name_col else ""
-            recipients.append(Recipient(phone=phone, first_name=first_name, row=i))
+            last_name = (row.get(last_name_col, "") or "").strip() if last_name_col else ""
+            recipients.append(Recipient(phone=phone, first_name=first_name, last_name=last_name, row=i))
 
     log.info("Loaded %d valid recipients (%d invalid, %d duplicates skipped)",
              len(recipients), skipped_invalid, skipped_dupe)
@@ -214,6 +204,7 @@ class ResultsLog:
         self._writer.writerow({
             "phone": r.phone,
             "first_name": r.first_name,
+            "last_name": r.last_name,
             "status": status,
             "message_sid": sid,
             "error_code": error_code,
@@ -239,7 +230,11 @@ class RateLimiter:
 
 
 def render_message(template: str, r: Recipient) -> str:
-    fields = {"first_name": r.first_name or "there", "phone": r.phone}
+    fields = {
+        "first_name": r.first_name or "there",
+        "last_name": r.last_name or "",
+        "phone": r.phone
+    }
     try:
         return template.format(**fields)
     except (KeyError, IndexError) as e:
@@ -248,7 +243,7 @@ def render_message(template: str, r: Recipient) -> str:
 
 def validate_template(template: str) -> None:
     placeholders = {name for _, name, _, _ in Formatter().parse(template) if name}
-    unknown = placeholders - {"first_name", "phone"}
+    unknown = placeholders - {"first_name", "last_name", "phone"}
     if unknown:
         sys.exit(f"error: template uses unsupported placeholders: {sorted(unknown)}")
 
