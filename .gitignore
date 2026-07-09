@@ -1,0 +1,18 @@
+# Secrets — never commit
+.env
+
+# Generated at runtime
+results.csv
+campaign.log
+single_send.csv
+bulk_upload.csv
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore

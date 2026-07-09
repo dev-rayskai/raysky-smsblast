@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import csv
 import os
+import sys
 
 app = Flask(__name__)
 
@@ -24,7 +25,7 @@ def send_single():
         writer.writerow([phone, name])
 
     result = os.popen(
-        f'cd {BASE} && python3 send_campaign.py --csv single_send.csv --limit 1 --yes --template "{template}" 2>&1'
+        f'cd {BASE} && "{sys.executable}" send_campaign.py --csv single_send.csv --limit 1 --yes --template "{template}" 2>&1'
     ).read()
 
     return jsonify({'output': result})
@@ -42,7 +43,7 @@ def send_bulk():
     file.save(csv_path)
 
     result = os.popen(
-        f'cd {BASE} && python3 send_campaign.py --csv bulk_upload.csv --batch-size {batch_size} --yes --template "{template}" 2>&1'
+        f'cd {BASE} && "{sys.executable}" send_campaign.py --csv bulk_upload.csv --batch-size {batch_size} --yes --template "{template}" 2>&1'
     ).read()
 
     return jsonify({'output': result})
