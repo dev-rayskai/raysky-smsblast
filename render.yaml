@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: raysky-smsblast
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 300
+    envVars:
+      # Set the actual values in the Render dashboard (Environment tab).
+      # Never commit real credentials. Leaving `sync: false` means Render
+      # will prompt for the value and keep it out of this file / git.
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        sync: false
+      # Use this instead of TWILIO_FROM_NUMBER if you send via a Messaging Service:
+      # - key: TWILIO_MESSAGING_SERVICE_SID
+      #   sync: false
