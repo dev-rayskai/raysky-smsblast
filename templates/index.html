@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RaysKAI SMS Campaign</title>
   <style>
+    :root {
+      --brand-primary: #6A24DB;
+      --brand-primary-hover: #5A1EBD;
+      --gradient-brand: linear-gradient(110deg, #2486FB 0%, #C03CFF 100%);
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -13,7 +18,15 @@
       min-height: 100vh;
       padding: 40px 20px;
     }
-    h1 { text-align: center; font-size: 2rem; margin-bottom: 6px; color: #a855f7; }
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 6px;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
     p.subtitle { text-align: center; color: #888; margin-bottom: 40px; }
     .container { max-width: 860px; margin: 0 auto; }
     .card {
@@ -25,7 +38,7 @@
     }
     .step-label {
       font-size: 0.75rem;
-      color: #a855f7;
+      color: var(--brand-primary);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -49,7 +62,8 @@
       font-size: 0.92rem;
       outline: none;
     }
-    input:focus, textarea:focus { border-color: #a855f7; }
+    input:focus, textarea:focus { border-color: var(--brand-primary); }
+    select:disabled, input:disabled { opacity: 0.45; cursor: not-allowed; }
     textarea { resize: vertical; min-height: 80px; }
     .hint { font-size: 0.73rem; color: #555; margin-top: 5px; }
     .stat-row {
@@ -66,7 +80,7 @@
       flex: 1;
       min-width: 120px;
     }
-    .stat .num { font-size: 1.6rem; font-weight: 700; color: #a855f7; }
+    .stat .num { font-size: 1.6rem; font-weight: 700; color: var(--brand-primary); }
     .stat .lbl { font-size: 0.72rem; color: #666; margin-top: 2px; }
     .stat.green .num { color: #a3e635; }
     .stat.red .num { color: #f87171; }
@@ -76,7 +90,7 @@
       background: #2a2a2a;
       border: 1px solid #444;
       border-radius: 20px;
-      color: #a855f7;
+      color: var(--brand-primary);
       font-size: 0.8rem;
       cursor: pointer;
       font-weight: 600;
@@ -127,7 +141,7 @@
       margin-top: 20px;
       width: 100%;
       padding: 13px;
-      background: #a855f7;
+      background: var(--brand-primary);
       color: white;
       border: none;
       border-radius: 8px;
@@ -136,7 +150,7 @@
       font-weight: 600;
       transition: background 0.2s;
     }
-    button.primary:hover { background: #9333ea; }
+    button.primary:hover { background: var(--brand-primary-hover); }
     button.primary:disabled { background: #444; cursor: not-allowed; }
     .output {
       margin-top: 16px;
@@ -153,7 +167,7 @@
       display: none;
     }
     table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-    th { text-align: left; padding: 8px; color: #a855f7; border-bottom: 1px solid #333; }
+    th { text-align: left; padding: 8px; color: var(--brand-primary); border-bottom: 1px solid #333; }
     td { padding: 8px; border-bottom: 1px solid #1e1e1e; }
     .badge {
       display: inline-block;
@@ -213,7 +227,50 @@
       </table>
     </div>
     <div id="view-flagged-link" style="display:none; margin-top:8px;">
-      <a href="#" onclick="toggleFlagged(); return false;" style="color:#a855f7; font-size:0.78rem;">View flagged rows</a>
+      <a href="#" onclick="toggleFlagged(); return false;" style="color:#6A24DB; font-size:0.78rem;">View flagged rows</a>
+    </div>
+  </div>
+
+  <!-- Step 1.5 -->
+  <div class="card">
+    <div class="step-label">Step 1.5</div>
+    <h2>Segment Recipients</h2>
+    <p class="hint" style="margin-top:0;">
+      Preview only. These filters need patient data (appointment history, provider, balances, location) from a
+      connected PMS/EHR — this app only reads phone/first_name/last_name from the uploaded CSV, so there's nothing
+      to filter on yet. Controls are shown for parity but disabled; the recipient count always reflects the full
+      uploaded list.
+    </p>
+
+    <div class="grid-2">
+      <div>
+        <label>Appointment Type</label>
+        <select disabled><option>All patients</option></select>
+      </div>
+      <div>
+        <label>Provider</label>
+        <select disabled><option>All providers</option></select>
+      </div>
+      <div>
+        <label>Last Visit</label>
+        <select disabled><option>Any time</option></select>
+      </div>
+      <div>
+        <label>Days Since Last Visit</label>
+        <input type="number" placeholder="Any" disabled />
+      </div>
+      <div>
+        <label>Balance Due</label>
+        <select disabled><option>Any</option></select>
+      </div>
+      <div>
+        <label>Preferred Location</label>
+        <select disabled><option>All locations</option></select>
+      </div>
+    </div>
+
+    <div class="meta-row">
+      <div class="meta">Segment match: <span id="segment-match-count">No PMS/EHR connected — showing full uploaded list</span></div>
     </div>
   </div>
 

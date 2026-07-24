@@ -177,6 +177,7 @@ def results():
     with open(results_path, newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
+            row.pop(None, None)
             rows.append(row)
 
     return jsonify({'rows': rows})
