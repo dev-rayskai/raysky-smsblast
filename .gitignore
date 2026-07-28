@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+campaign.log
+bulk_upload.csv
+single_send.csv
+templates/bulk_upload.csv
