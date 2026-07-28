@@ -4,20 +4,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RaysKAI SMS Campaign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {
       --brand-primary: #6A24DB;
       --brand-primary-hover: #5A1EBD;
       --gradient-brand: linear-gradient(110deg, #2486FB 0%, #C03CFF 100%);
+      --logo-gradient: linear-gradient(110deg, #773DF4 0%, #35FFE2 100%);
+      --text-strong: #0d142e;
+      --text-body: #353c54;
+      --text-muted: #6e7791;
+      --text-faint: #9aa2bd;
+      --border: #dde1ec;
+      --surface-page: #f6f7fb;
+      --surface-card: #ffffff;
+      --surface-sunken: #f6f7fb;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #0f0f0f;
-      color: #f0f0f0;
+      background: var(--surface-page);
+      color: var(--text-body);
       min-height: 100vh;
       padding: 40px 20px;
     }
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--logo-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-wordmark {
+      font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+      font-weight: 700;
+      font-size: 16.5px;
+      letter-spacing: -0.02em;
+      color: var(--text-strong);
+    }
+    .logo-wordmark-accent { color: #773DF4; }
     h1 {
       text-align: center;
       font-size: 2rem;
@@ -27,11 +63,11 @@
       background-clip: text;
       color: transparent;
     }
-    p.subtitle { text-align: center; color: #888; margin-bottom: 40px; }
+    p.subtitle { text-align: center; color: var(--text-muted); margin-bottom: 40px; }
     .container { max-width: 860px; margin: 0 auto; }
     .card {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 28px;
       margin-bottom: 24px;
@@ -47,25 +83,25 @@
     .card h2 {
       font-size: 1.1rem;
       margin-bottom: 18px;
-      color: #f0f0f0;
-      border-bottom: 1px solid #2a2a2a;
+      color: var(--text-strong);
+      border-bottom: 1px solid var(--border);
       padding-bottom: 10px;
     }
-    label { display: block; font-size: 0.82rem; color: #aaa; margin-bottom: 5px; margin-top: 14px; }
+    label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 5px; margin-top: 14px; }
     input, textarea, select {
       width: 100%;
       padding: 10px 14px;
-      background: #111;
-      border: 1px solid #333;
+      background: var(--surface-sunken);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: #f0f0f0;
+      color: var(--text-body);
       font-size: 0.92rem;
       outline: none;
     }
     input:focus, textarea:focus { border-color: var(--brand-primary); }
-    select:disabled, input:disabled { opacity: 0.45; cursor: not-allowed; }
+    select:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
     textarea { resize: vertical; min-height: 80px; }
-    .hint { font-size: 0.73rem; color: #555; margin-top: 5px; }
+    .hint { font-size: 0.73rem; color: var(--text-faint); margin-top: 5px; }
     .stat-row {
       display: flex;
       gap: 16px;
@@ -73,53 +109,53 @@
       flex-wrap: wrap;
     }
     .stat {
-      background: #111;
-      border: 1px solid #2a2a2a;
+      background: var(--surface-sunken);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 14px 20px;
       flex: 1;
       min-width: 120px;
     }
     .stat .num { font-size: 1.6rem; font-weight: 700; color: var(--brand-primary); }
-    .stat .lbl { font-size: 0.72rem; color: #666; margin-top: 2px; }
-    .stat.green .num { color: #a3e635; }
-    .stat.red .num { color: #f87171; }
+    .stat .lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+    .stat.green .num { color: #14b87e; }
+    .stat.red .num { color: #e0304a; }
     .token-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
     .token-btn {
       padding: 4px 12px;
-      background: #2a2a2a;
-      border: 1px solid #444;
+      background: var(--surface-sunken);
+      border: 1px solid var(--border);
       border-radius: 20px;
       color: var(--brand-primary);
       font-size: 0.8rem;
       cursor: pointer;
       font-weight: 600;
     }
-    .token-btn:hover { background: #333; }
-    .char-count { font-size: 0.75rem; color: #666; margin-top: 6px; text-align: right; }
+    .token-btn:hover { background: var(--border); }
+    .char-count { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; text-align: right; }
     .preview-box {
-      background: #111;
-      border: 1px solid #2a2a2a;
+      background: var(--surface-sunken);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 14px;
       margin-top: 14px;
       font-size: 0.85rem;
-      color: #ccc;
+      color: var(--text-body);
       line-height: 1.5;
     }
-    .preview-label { font-size: 0.72rem; color: #555; margin-bottom: 6px; }
+    .preview-label { font-size: 0.72rem; color: var(--text-faint); margin-bottom: 6px; }
     .consent-row {
       display: flex;
       align-items: flex-start;
       gap: 12px;
       margin-top: 16px;
-      background: #111;
-      border: 1px solid #2a2a2a;
+      background: var(--surface-sunken);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 14px;
     }
     .consent-row input[type=checkbox] { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; }
-    .consent-row span { font-size: 0.82rem; color: #aaa; line-height: 1.5; }
+    .consent-row span { font-size: 0.82rem; color: var(--text-body); line-height: 1.5; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .meta-row {
       display: flex;
@@ -128,15 +164,15 @@
       flex-wrap: wrap;
     }
     .meta {
-      background: #111;
-      border: 1px solid #2a2a2a;
+      background: var(--surface-sunken);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 10px 14px;
       flex: 1;
       font-size: 0.8rem;
-      color: #888;
+      color: var(--text-muted);
     }
-    .meta span { color: #f0f0f0; font-weight: 600; }
+    .meta span { color: var(--text-strong); font-weight: 600; }
     button.primary {
       margin-top: 20px;
       width: 100%;
@@ -151,24 +187,24 @@
       transition: background 0.2s;
     }
     button.primary:hover { background: var(--brand-primary-hover); }
-    button.primary:disabled { background: #444; cursor: not-allowed; }
+    button.primary:disabled { background: var(--text-faint); cursor: not-allowed; }
     .output {
       margin-top: 16px;
-      background: #111;
-      border: 1px solid #2a2a2a;
+      background: var(--surface-sunken);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 14px;
       font-family: monospace;
       font-size: 0.78rem;
-      color: #a3e635;
+      color: #0f7a52;
       white-space: pre-wrap;
       max-height: 260px;
       overflow-y: auto;
       display: none;
     }
     table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-    th { text-align: left; padding: 8px; color: var(--brand-primary); border-bottom: 1px solid #333; }
-    td { padding: 8px; border-bottom: 1px solid #1e1e1e; }
+    th { text-align: left; padding: 8px; color: var(--brand-primary); border-bottom: 1px solid var(--border); }
+    td { padding: 8px; border-bottom: 1px solid var(--border); color: var(--text-body); }
     .badge {
       display: inline-block;
       padding: 2px 8px;
@@ -176,22 +212,28 @@
       font-size: 0.72rem;
       font-weight: 600;
     }
-    .badge.sent { background: #1a3a1a; color: #a3e635; }
-    .badge.failed { background: #3a1a1a; color: #f87171; }
-    .badge.dry-run { background: #2a2a1a; color: #facc15; }
+    .badge.sent { background: #e4f8f0; color: #0f7a52; }
+    .badge.failed { background: #fde8eb; color: #c81e3a; }
+    .badge.dry-run { background: #fdf1dd; color: #a5690a; }
     .flagged-list {
       margin-top: 12px;
       max-height: 150px;
       overflow-y: auto;
       font-size: 0.75rem;
-      color: #888;
+      color: var(--text-muted);
       display: none;
     }
-    .flagged-list table td { color: #888; }
+    .flagged-list table td { color: var(--text-muted); }
   </style>
 </head>
 <body>
 <div class="container">
+  <div class="brand-header">
+    <div class="logo-icon">
+      <svg width="15" height="16" viewBox="0 0 24 27" fill="none" aria-hidden="true"><path d="M9 1l13 0-2 6-9 0z" fill="#fff"></path><path d="M15 9l5 5-3 5-4-6z" fill="#fff"></path><path d="M7 16l11 0-3 10-3-6-3 6-4-10z" fill="#fff"></path></svg>
+    </div>
+    <span class="logo-wordmark">raysK<span class="logo-wordmark-accent">AI</span></span>
+  </div>
   <h1>RaysKAI SMS Campaign</h1>
   <p class="subtitle">Bulk SMS tool for Canadian clinic patients</p>
 
@@ -492,7 +534,7 @@
     const container = document.getElementById('results-table');
 
     if (!data.rows || data.rows.length === 0) {
-      container.innerHTML = '<p style="color:#888; font-size:0.85rem;">No messages sent yet.</p>';
+      container.innerHTML = '<p style="color:#6e7791; font-size:0.85rem;">No messages sent yet.</p>';
       return;
     }
 
@@ -504,7 +546,7 @@
         <td>${row.first_name || '-'}</td>
         <td>${row.last_name || '-'}</td>
         <td>${badge}</td>
-        <td style="color:#888;">${row.timestamp || '-'}</td>
+        <td style="color:#6e7791;">${row.timestamp || '-'}</td>
       </tr>`;
     });
     html += '</table>';
