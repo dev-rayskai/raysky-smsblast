@@ -3,6 +3,7 @@ import csv
 import os
 import io
 import subprocess
+import sys
 from datetime import datetime
 import pytz
 
@@ -119,7 +120,7 @@ def send_single():
         writer.writerow([phone, name, last_name])
 
     proc = subprocess.run(
-        ['/usr/local/bin/python3.10', 'send_campaign.py',
+        [sys.executable, 'send_campaign.py',
          '--csv', 'single_send.csv', '--limit', '1', '--yes',
          '--template', template],
         cwd=BASE, capture_output=True, text=True,
@@ -153,7 +154,7 @@ def send_bulk():
     file.save(csv_path)
 
     proc = subprocess.run(
-        ['/usr/local/bin/python3.10', 'send_campaign.py',
+        [sys.executable, 'send_campaign.py',
          '--csv', 'bulk_upload.csv',
          '--batch-size', batch_size,
          '--batch-pause', batch_pause,
