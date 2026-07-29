@@ -6,6 +6,7 @@ results.csv
 campaign.log
 single_send.csv
 bulk_upload.csv
+templates/bulk_upload.csv
 
 # Python
 __pycache__/
